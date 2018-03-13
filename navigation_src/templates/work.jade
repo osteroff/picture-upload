@@ -1,0 +1,12 @@
+doctype html
+html
+  head
+    meta(charset='utf-8')
+    title test
+    script(src="https://api2.sktelecom.com/tmap/js?version=1&format=javascript&appKey=97e063ba-579f-4055-a310-fdf9ec17dcd7")
+    script(src="https://code.jquery.com/jquery-1.10.2.js")
+    script(src="route.js")
+
+  body(onload="initMap(#{startLongitude}, #{startLatitude}, #{destLongitude}, #{destLatitude})")
+    div(id="map_div")
+    p(id="result")

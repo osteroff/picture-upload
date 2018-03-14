@@ -13,6 +13,19 @@ var port1 = 80;
 var port2 = 443;
 
 var app = express();
+
+var orientDB = require('orientjs');
+
+var server = orientDB({
+  host: 'localhost',
+  port: 2424,
+  username: 'root',
+  password: '1324803'
+});
+
+var db = server.use('kumoh-guide');
+var sql = 'select from restaurant';
+
 app.use(express.urlencoded());
 app.use(express.static('src/javascript'));
 
@@ -29,7 +42,11 @@ https.createServer(options, app).listen(port2, function(){
 });
 
 app.get('/', function (req, res) {
-  res.render('home');
+  db.query(sql).then(function(restaurantList) {
+    console.log(restaurantList);
+    res.render('home', {restaurants: restaurantList});
+  })
+  // res.render('home');
 });
 
 app.get('/work', function(req, res) {

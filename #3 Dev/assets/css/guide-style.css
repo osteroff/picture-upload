@@ -1,0 +1,27 @@
+.header {
+    display: inline-block;
+    padding-left: 30px;
+    font-family: Verdana;
+}
+
+.menu {
+    display: block;
+    float: right;
+    margin: 40px;
+    font-size: 12px;
+}
+
+.menu a {
+    padding-left: 20px;
+}
+
+.body {
+    padding: 200px;
+    background-color: #f1f1f1;
+    background-position: 50% 30%;
+}
+
+.footer {
+    text-align: center;
+    padding: 50px;
+}

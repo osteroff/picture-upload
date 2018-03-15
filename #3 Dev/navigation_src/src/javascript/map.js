@@ -34,7 +34,6 @@ function initMap() {
       longitude = position.coords.longitude;
       latitude = position.coords.latitude;
       makeMap(longitude, latitude);
-      return coords;
     }, function(error) {
       console.error(error);
       document.write(error);

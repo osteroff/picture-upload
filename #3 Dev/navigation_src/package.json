@@ -10,8 +10,10 @@
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.18.2",
+    "cheerio": "^1.0.0-rc.2",
     "express": "^4.16.2",
     "jade": "^1.11.0",
+    "orientjs": "^2.2.9",
     "supervisor": "^0.12.0"
   }
 }

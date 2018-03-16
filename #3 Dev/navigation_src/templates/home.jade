@@ -15,7 +15,7 @@ html
       }
     div(id="map_div")
     h1
-      each restaurant in restaurants
-        a(href="#" onclick="clickLocation(#{restaurant.longitude}, #{restaurant.latitude})") #{restaurant.name}
+      each tour in tourList
+        a(href="#" onclick="clickLocation(#{tour.longitude}, #{tour.latitude})") #{tour.title}
         br
     p(id="result")

@@ -10,10 +10,11 @@ var passport = require('passport')
   , LocalStrategy = require('passport-local').Strategy;
 var FacebookStrategy = require('passport-facebook').Strategy;
 var multer = require('multer');
-// var upload = multer({dest: 'upload/'});   // 목적지
-var upload = multer({storage: 'upload/'});   // 목적지
+var upload = multer({dest: 'upload/'});   // 목적지
+// var upload = multer({storage: 'upload/'});   // 목적지
 var _storage = multer.diskStorage();
 var fs = require('fs');
+
 app.set('view engine', 'jade');
 app.set('views', './templates');
 
@@ -333,6 +334,7 @@ app.get('/upload', function(req, res) {
 
 app.post('/upload', upload.single('picture'), function(req, res) { // single인자로 file name에 지정된 값을 설정
   console.log(req.file);
+  var sql = 'insert into user (username, password, nickname, salt) values(?, ?, ?, ?)';
   res.send('aa' + req.file);
 });
 

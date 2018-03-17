@@ -1,0 +1,61 @@
+doctype html
+html
+  head
+    title Picup
+    meta(charset='UTF-8')
+    meta(name='viewport', content='width=device-width, initial-scale=1.0')
+    link(rel='stylesheet', href='../assets/css/guide-style.css')
+    link(rel='stylesheet', href='../assets/css/guide-timer.css')
+  body
+    h1.header
+      a(href='home') Picup
+    .menu
+      a(href='home') HOME
+      a(href='work') WORK
+      a(href='about') ABOUT
+      a(href='contact') CONTACT
+    .bg
+      p Front End
+      hr
+      table.contact-table
+        thead.chead
+          tr
+            br
+            | 손우규
+        td
+          br
+          | +82 10 9350 3169
+          br
+          | swk3169@gmail.com
+          br
+          br
+        a.front-link(href='https://github.com/swk3169', target='_blank')
+          img(src='../assets/img/github-logo.png')
+          | https://github.com/swk3169
+      p Back End
+      hr
+      table
+        thead.chead
+          tr
+            br
+            | 이정환
+        td
+          br
+          | +82 10 3223 8539
+          br
+          | ljhw3377@gmail.com
+          br
+        a.back-link(href='https://github.com/ljh1324', target='_blank')
+          img(src='../assets/img/github-logo.png')
+          | https://github.com/ljh1324
+    footer
+      #clock.light
+        .display
+          .weekdays
+          .ampm
+          .alarm
+          .digits
+    // JavaScript Includes
+    script(src='http://cdnjs.cloudflare.com/ajax/libs/jquery/1.10.1/jquery.min.js')
+    script(src='http://cdnjs.cloudflare.com/ajax/libs/moment.js/2.0.0/moment.min.js')
+    script(src='../assets/js/guide-timer.js')

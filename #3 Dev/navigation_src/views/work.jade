@@ -20,6 +20,11 @@ html
       div(id="map_div")
     p
     a(href="/upload") Picup!
+    script(type='text/javascript').
+      ui
+        each picture in pictures
+          li=picture.longitude
+          mark(picture.longitude, picture.latitude)
     // JavaScript Includes
     script(src='http://cdnjs.cloudflare.com/ajax/libs/jquery/1.10.1/jquery.min.js')
     script(src='http://cdnjs.cloudflare.com/ajax/libs/moment.js/2.0.0/moment.min.js')

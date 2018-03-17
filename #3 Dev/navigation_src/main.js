@@ -8,7 +8,7 @@ const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const multer = require('multer');
 
-const http=require('http');
+const http = require('http');
 const https = require('https');
 const fs = require('fs');
 
@@ -17,8 +17,21 @@ var _storage = multer.diskStorage({
     cb(null, 'upload/' + req.session.username);
   },
   filename: function(req, file, cb) {
+    var sql = 'insert into picture (username, latitude, longitude, filename) values(?, ?, ?, ?)';
     var idx = file.originalname.lastIndexOf(".");
-    cb(null, file.fieldname + '-' + Date.now() + file.originalname.substring(idx));
+    var filename = file.fieldname + '-' + Date.now() + file.originalname.substring(idx)
+    var params = [req.session.username, req.session.latitude, req.session.longitude, filename];
+
+    conn.query(sql, params, function (error, rows, fields) {
+      if (error) {
+        console.log(error);
+      }
+      else {
+        console.log('sucess');
+      }
+    });
+
+    cb(null, filename);
   }
 });
 var upload = multer({storage: _storage});   // 목적지
@@ -50,19 +63,6 @@ http.createServer(app).listen(port1, function(){
 https.createServer(options, app).listen(port2, function(){
   console.log("Https server listening on port " + port2);
 });
-
-function createFolder(folder, createFolder){
-	var tgFolder = path.join(folder, createFolder);
-	console.log("createFolder ==> " + tgFolder);
-	fs.mkdir(tgFolder, 0666, function(err){
-		if(err){
-			return false;
-		}else{
-			console.log('create newDir');
-			return true;
-		}
-	});
-}
 
 app.locals.pretty = true;
 app.set('view engine', 'jade');
@@ -175,10 +175,22 @@ app.post('/register', function(req, res) {
 
 app.get('/work', function(req, res){
   if (req.session.username) {
-    longitude = req.query.longitude;
-    latitude = req.query.latitude;
+    req.session.longitude = req.query.longitude;
+    req.session.latitude = req.query.latitude;
+
+    var username = req.session.username;
+    var sql = 'select * from picture where username = ?'
+    var params = [username];
+    conn.query(sql, params, function (error, pictures, fields) {
+      if (error) {
+        console.log(error);
+      }
+      else {
+        console.log(pictures);
+        res.render('work', {latitude:latitude, longitude:longitude, pictures: pictures});
+      }
+    });
     console.log(longitude, latitude);
-    res.render('work', {latitude:latitude, longitude:longitude});
   }
   else {
     res.redirect('/home');
@@ -205,8 +217,8 @@ app.get('/upload', function(req, res) {
 
 app.post('/upload', upload.single('picture'), function(req, res) { // single인자로 file name에 지정된 값을 설정
   console.log(req.file);
-  var sql = 'insert into user (username, password, nickname, salt) values(?, ?, ?, ?)';
-  res.send('aa' + req.file);
+  // var sql = 'insert into user (username, password, nickname, salt) values(?, ?, ?, ?)';
+  res.redirect('/work');
 });
 
 // port setting

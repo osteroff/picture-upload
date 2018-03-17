@@ -8,6 +8,8 @@ var hasher = bkfd2Password();
 var app = express();
 var passport = require('passport')
   , LocalStrategy = require('passport-local').Strategy;
+var FacebookStrategy = require('passport-facebook').Strategy;
+
 
 app.use(bodyParser.urlencoded({extended: false}));
 
@@ -43,6 +45,7 @@ app.get('/auth/login', function(req, res) {
         <input type="submit">
       </p>
     </form>
+    <a href="/auth/facebook">Facebook</a>
   `;
   res.send(output);
 });
@@ -90,18 +93,25 @@ app.post('/auth/register', function(req, res) {
         });
       });
   });
-
-  // using md5
-  // var user = {
-  //   username: req.body.username,
-  //   password: md5(req.body.password),
-  //   displayName: req.body.displayName
-  // };
-  // users.push(user);
-  // console.log(users);
-  // req.session.displayName = req.body.displayName;
-  // res.redirect("/welcome");
 });
+
+app.get(
+  '/auth/facebook',
+  passport.authenticate( // 미들 웨어가 함수를 만들어줌
+  'facebook'    // passport 전략 중 facebook을 쓴다. /auth/facebook 에 들어가면 redirect 시켜준다.
+  )
+);
+
+app.get(
+  '/auth/facebook/callback',  // 페이스북 사이트에 갔다가 사용자가 확인을 누를 경우 서버의 콜백을 호출한다.
+  passport.authenticate(
+    'facebook',
+    {
+      successRedirect: '/welcome',
+      failureRedirect: '/auth/login'
+    }
+  )
+);
 
 // done에서 전달된 user값
 passport.serializeUser(function(user, done) {
@@ -115,7 +125,7 @@ passport.deserializeUser(function(id, done) { // 그 다음 사용자가 페이�
   {
     var user = users[i];
     if (user.username === id) {
-      done(null, user);  // session에 user라는 객체 등록
+      done(null, user);  // 서버 req 객체에 user라는 객체 등록
     }
   }
 });
@@ -150,12 +160,30 @@ passport.use(new LocalStrategy(
   }
 )); // 구체적인 인증 전략
 
+passport.use(new FacebookStrategy({
+    clientID: "158010941681734",
+    clientSecret: "1f9846bcd1ad4af83b74b1db864b42a9",
+    callbackURL: "/auth/facebook/callback"
+  },
+  function(accessToken, refreshToken, profile, done) {
+    console.log(profile);
+    // User.findOrCreate(..., function(err, user) {
+    //   if (err) { return done(err); }
+    //   done(null, user);
+    // });
+  }
+));
+
+
 app.post('/auth/login', passport.authenticate( // 미들 웨어가 함수를 만들어줌
   'local',    // passport 전략 중 local이 실행된다.
   { successRedirect: '/welcome',
     failureRedirect: '/auth/login',
     failureFlash: false }) // done에서 던진 인증 메시지를 준다.
 );
+
+
+
 // app.post('/auth/login', function(req, res) {
 //   // var user = {
 //   //   username:'egoing',
@@ -214,6 +242,6 @@ app.get('/welcome', function(req, res) {
   }
 })
 
-app.listen(3003, function() {
+app.listen(80, function() {
   console.log('Connected 3003 port!');
 });

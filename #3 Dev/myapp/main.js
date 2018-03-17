@@ -17,7 +17,10 @@ app.get('/home', function(req, res){
 });
 
 app.get('/work', function(req, res){
-    res.render('work');
+    var longitude = req.query.longitude;
+    var latitude = req.query.latitude;
+    console.log(longitude, latitude);
+    res.render('work', {latitude:latitude, longitude:longitude});
 });
 
 app.get('/about', function(req, res){
@@ -26,6 +29,10 @@ app.get('/about', function(req, res){
 
 app.get('/contact', function(req, res){
     res.render('contact');
+});
+
+app.get('/loc', function(req, res){
+    res.render('location');
 });
 
 // port setting

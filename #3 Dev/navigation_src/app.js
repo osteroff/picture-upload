@@ -92,11 +92,50 @@ app.get('/home', function(req, res) {
     </form>
     <a href="/register">회원 가입</a>
   `
+  res.send(html);
 });
 
 app.get('/register', function(req, res) {
-
+  var html = `
+    <form action='/login' method='post'>
+    <form action="/auth/login" method="post">
+      <p>
+        <input type="text" name="username" placeholder="username">
+      </p>
+      <p>
+        <input type="password" name="password" placeholder="password">
+      </p>
+      <p>
+        <input type="text" name="nickname" placeholder="nickname">
+      </p>
+      <p>
+        <input type="submit">
+      </p>
+    </form>`
+  res.send(html);
 });
+
+app.post('/register', function(req, res) {
+  hasher({password:req.body.password}, function(err, pass, salt, hash) {
+      console.log(hash);
+      var user = {
+        username: req.body.username,
+        password: hash,
+        salt: salt,
+        displayName: req.body.displayName
+      };
+      users.push(user);
+      console.log(users);
+      req.login(user, function(err) {
+        req.session.save(function() {
+          res.redirect('/welcome');
+        });
+      });
+  });
+
+  res.send(html);
+});
+
 // app.get('/location', function(req, res) {
 //   var longitude = req.query.longitude;
 //   var latitude = req.query.latitude;

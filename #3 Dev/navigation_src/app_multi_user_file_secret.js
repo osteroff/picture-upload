@@ -68,15 +68,31 @@ app.post('/auth/register', function(req, res) {
   console.log(req.body.username);
   console.log(req.body.password);
   console.log(req.body.displayName);
-  var user = {
-    username: req.body.username,
-    password: md5(req.body.password),
-    displayName: req.body.displayName
-  };
-  users.push(user);
-  console.log(users);
-  req.session.displayName = req.body.displayName;
-  res.redirect("/welcome");
+
+  hasher({password:req.body.displayName}, function(err, pass, salt, hash) {
+      console.log(hash);
+      var user = {
+        username: req.body.username,
+        password: hash,
+        salt: salt,
+        displayName: req.body.displayName
+      };
+      users.push(user);
+      console.log(users);
+      req.session.displayName = req.body.displayName;
+      res.redirect("/welcome");
+  });
+
+  // using md5
+  // var user = {
+  //   username: req.body.username,
+  //   password: md5(req.body.password),
+  //   displayName: req.body.displayName
+  // };
+  // users.push(user);
+  // console.log(users);
+  // req.session.displayName = req.body.displayName;
+  // res.redirect("/welcome");
 });
 
 app.post('/auth/login', function(req, res) {
@@ -93,13 +109,26 @@ app.post('/auth/login', function(req, res) {
     var user = users[i];
     console.log(uname, pwd);
     console.log(user.username, user.password);
-    if (uname === user.username && md5(pwd) === user.password) {
-      req.session.displayName = user.displayName;
-      return req.session.save(function() {  // session이 종료되고, session에 저장이 완료되면
-        res.redirect('/welcome');
+    if (uname === user.username) {
+      return hasher({password: pwd, salt: user.salt}, function(err, pass, salt, hash) {  // hasher가 시작되면서 return을 줌으로써 for문이 실행되지 않도록 한다.
+        if (hash === user.password) {
+          req.session.displayName = user.displayName;
+          req.session.save(function() {
+            res.redirect('/welcome');
+          })
+        } else {
+          res.send('Who are you? <a href="/auth/login">login</a>');
+        }
       });
-
     }
+
+    // using md5
+    // if (uname === user.username && md5(pwd) === user.password) {
+    //   req.session.displayName = user.displayName;
+    //   return req.session.save(function() {  // session이 종료되고, session에 저장이 완료되면
+    //     res.redirect('/welcome');
+    //   });
+    // }
   }
   res.send('Who are you? <a href="/auth/login">login</a>');
 });

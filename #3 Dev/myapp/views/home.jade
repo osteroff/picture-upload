@@ -15,11 +15,17 @@ html
       a(href='about') ABOUT
       a(href='contact') CONTACT
     .bg
-    .row
-      .column
-        // root
-      .column
-        // navigation
+      h1 Picup
+      form(action='/auth/login', method='post')
+      p
+      input(type='text', name='id', placeholder='id')
+      p
+      input(type='password', name='password', placeholder='password')
+      p
+      input(type='submit', name='login', value='Login')
+      br
+      a(href="/register" target="_blank") Sign in
+
     footer
       #clock.light
         .display

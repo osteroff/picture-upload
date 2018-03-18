@@ -24,6 +24,7 @@
 
 .bg div {
     position: fixed;
+    vertical-align: center;
 }
 
 .about-table {
@@ -52,4 +53,32 @@
     float: right;
     margin-right: 50px;
     text-decoration: none;
+}
+
+.button {
+    width:100px;
+    background-color: #777777;
+    border: none;
+    color:#fff;
+    padding: 15px 0;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 15px;
+    margin: 4px;
+    cursor: pointer;
+}
+
+.upload-button {
+    width:100px;
+    background-color: #777777;
+    border: none;
+    color:#fff;
+    padding: 15px 0;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 15px;
+    margin: 4px;
+    cursor: pointer;
 }

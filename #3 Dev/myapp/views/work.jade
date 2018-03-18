@@ -8,9 +8,7 @@ html
     script(src="https://code.jquery.com/jquery-1.10.2.js")
     script(src="../assets/js/map.js")
     link(rel='stylesheet', href='../assets/css/map-style.css')
-  p
-    button(type='button', onclick="location.href='/upload'") Picup!
-  body(onload="makeMap(#{longitude}, #{latitude})")
+  body(onload="makeMap(#{longitude}, #{latitude}, #{pictureLocation})")
     h1.header
       a(href='home') Picup
     .menu
@@ -19,7 +17,23 @@ html
       a(href='about') ABOUT
       a(href='contact') CONTACT
     .bg
-      div(id="map_div")
+      center
+        frameset(cols='50%, *', align="center")
+          iframe(src='/map', width="45%", height="700px", float="left")
+          iframe(src='/list', width="45%", height="700px")
+        // div(id="map_div")
+        p
+          button(class='button', type='button', onclick="location.href='/upload'") Picup!
+
+    // script(type="text/javascript").
+      //function addMarker(longlats) {
+      //  for (var i = 0; i < longlats.length; ++i) {
+      //    var picture = pictures[i];
+      //    mark(picture.longitude, picture.latitude);
+      //    }
+      //   }
+      // addMarker(#{pictureLocation})
+      // mark(127.04595, 37.5112);
     // JavaScript Includes
     script(src='http://cdnjs.cloudflare.com/ajax/libs/jquery/1.10.1/jquery.min.js')
     script(src='http://cdnjs.cloudflare.com/ajax/libs/moment.js/2.0.0/moment.min.js')

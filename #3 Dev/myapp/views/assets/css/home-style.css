@@ -37,6 +37,8 @@
 .bg p {
     margin-left:25px;
     font-size:20px;
+    border: 0;
+    outline: 0;
 }
 
 .bg div {
@@ -75,4 +77,18 @@
 .footer {
     text-align: center;
     padding: 50px;
+}
+
+.button {
+    width:100px;
+    background-color: #777777;
+    border: none;
+    color:#fff;
+    padding: 15px 0;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 15px;
+    margin: 4px;
+    cursor: pointer;
 }

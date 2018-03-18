@@ -1,0 +1,6 @@
+ul(data-role='listview', data-inset='true')
+  each picture in pictures
+    li
+      a(href='#')
+        img(src='#{picture.filename}')
+        h2 #{picture.longitude}, #{picture.latitude}

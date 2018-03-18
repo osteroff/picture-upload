@@ -1,0 +1,15 @@
+doctype html
+html
+  head
+    title Picup
+    meta(charset='UTF-8')
+    meta(name='viewport', content='width=device-width, initial-scale=1.0')
+    script(src="https://api2.sktelecom.com/tmap/js?version=1&format=javascript&appKey=97e063ba-579f-4055-a310-fdf9ec17dcd7")
+    script(src="https://code.jquery.com/jquery-1.10.2.js")
+    script(src="../assets/js/map.js")
+    link(rel='stylesheet', href='../assets/css/map-style.css')
+  body(onload="makeMap(#{longitude}, #{latitude}, #{pictureLocation})")
+    .bg
+      div(id="map_div")
+    script(src='http://cdnjs.cloudflare.com/ajax/libs/jquery/1.10.1/jquery.min.js')
+    script(src='http://cdnjs.cloudflare.com/ajax/libs/moment.js/2.0.0/moment.min.js')

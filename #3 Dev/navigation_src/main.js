@@ -24,10 +24,10 @@ var _storage = multer.diskStorage({
 
     conn.query(sql, params, function (error, rows, fields) {
       if (error) {
-        console.log(error);
+        // console.log(error);
       }
       else {
-        console.log('sucess');
+        // console.log('sucess');
       }
     });
 
@@ -85,7 +85,7 @@ app.get('/', function(req, res){
 })
 
 app.get('/home', function(req, res){
-  console.log('test');
+  // console.log('test');
   if (req.session.nickname)
     res.render('home_login', {nickname: req.session.nickname});
   else
@@ -93,7 +93,7 @@ app.get('/home', function(req, res){
 });
 
 app.get('/logout', function(req, res){
-  console.log('test');
+  // console.log('test');
   req.session.username = null;
   req.session.nickname = null;
   res.redirect('/home');
@@ -107,7 +107,7 @@ app.get('/logout', function(req, res){
 // );
 
 app.post('/home', function(req, res) {
-  console.log('in post');
+  // console.log('in post');
   var username = req.body.username;
   var password = md5(req.body.password);
 
@@ -115,26 +115,26 @@ app.post('/home', function(req, res) {
 
   conn.query(sql, function (error, users, fields) {
     if (error) {
-      console.log(err);
+      // console.log(err);
     }
     else {
       for (var i=0; i < users.length; ++i) {
         // console.log(rows[i].username);
-        console.log(password);
-        console.log(users[i].password);
-        console.log(username);
-        console.log(users[i].username);
+        // console.log(password);
+        // console.log(users[i].password);
+        // console.log(username);
+        // console.log(users[i].username);
         if (users[i].username === username && users[i].password === password)
         {
           req.session.username = username;
           req.session.nickname = users[i].nickname;
           return req.session.save(function() {
-            console.log(req.session.nickname);
+            // console.log(req.session.nickname);
             res.redirect('/loc');
           })
         }
       }
-      console.log('wrong ')
+      // console.log('wrong ')
       res.render('home');
       // console.log('fields', fields);
     }
@@ -148,16 +148,16 @@ app.get('/register', function(req, res) {
 
 app.post('/register', function(req, res) {
   var sql = 'insert into user (username, password, nickname) values(?, ?, ?)';
-  console.log(req.body.password);
-  console.log(md5(req.body.password));
+  // console.log(req.body.password);
+  // console.log(md5(req.body.password));
 
   var params = [req.body.username, md5(req.body.password), req.body.nickname];
   conn.query(sql, params, function (error, rows, fields) {
     if (error) {
-      console.log(error);
+    //  console.log(error);
     }
     else {
-      console.log(rows);
+      // console.log(rows);
       req.session.username = req.body.username;
       req.session.nickname = req.body.nickname;
 
@@ -183,14 +183,21 @@ app.get('/work', function(req, res){
     var params = [username];
     conn.query(sql, params, function (error, pictures, fields) {
       if (error) {
-        console.log(error);
+        //console.log(error);
       }
       else {
-        console.log(pictures);
-        res.render('work', {latitude:latitude, longitude:longitude, pictures: pictures});
+        // console.log(pictures);
+        var longlats = [];
+        for (var i = 0; i < pictures.length; ++i)
+        {
+          longlats.push({longitude:pictures[i].longitude, latitude:pictures[i].latitude});
+        }
+        console.log(longlats);
+
+        res.render('work', {latitude:latitude, longitude:longitude, pictureLocation: JSON.stringify(longlats)});
       }
     });
-    console.log(longitude, latitude);
+    // console.log(longitude, latitude);
   }
   else {
     res.redirect('/home');
@@ -211,12 +218,103 @@ app.get('/loc', function(req, res){
 
 // 파일 업로드
 app.get('/upload', function(req, res) {
-  console.log(latitude, longitude);
+  // console.log(latitude, longitude);
   res.render('upload');
 });
 
+app.get('/map', function(req, res) {
+  if (req.session.username) {
+    req.session.longitude = req.query.longitude;
+    req.session.latitude = req.query.latitude;
+
+    var username = req.session.username;
+    var sql = 'select * from picture where username = ?'
+    var params = [username];
+    conn.query(sql, params, function (error, pictures, fields) {
+      if (error) {
+        //console.log(error);
+      }
+      else {
+        // console.log(pictures);
+        var longlats = [];
+        // console.log(pictures.length);
+        for (var i = 0; i < pictures.length; ++i)
+        {
+          longlats.push({longitude:pictures[i].longitude, latitude:pictures[i].latitude});
+        }
+        // console.log(longlats);
+
+        res.render('map', {latitude:latitude, longitude:longitude, pictureLocation: JSON.stringify(longlats)});
+      }
+    });
+    // console.log(longitude, latitude);
+  }
+  else {
+    res.redirect('/home');
+  }
+});
+
+app.get('/list', function(req, res) {
+  if (req.session.username) {
+    req.session.longitude = req.query.longitude;
+    req.session.latitude = req.query.latitude;
+
+    var username = req.session.username;
+
+    console.log(username);
+    var sql = 'select * from picture where username = ?'
+    var params = [username];
+    conn.query(sql, params, function (error, pictures, fields) {
+      if (error) {
+        //console.log(error);
+      }
+      else {
+        // console.log(pictures);
+        var pictures = [];
+        console.log(pictures.length);
+        for (var i = 0; i < pictures.length; ++i)
+        {
+          console.log(req.session.username);
+          var filename = req.session.username + "/" + pictures[i].filename;
+          console.log(filename);
+          pictures.push( { filename: filename, longitude: pictures[i].longitude, latitude: pictures[i].latitude} );
+          // longlats.push({longitude:pictures[i].longitude, latitude:pictures[i].latitude});
+        }
+        // console.log(longlats);
+        console.log(pictures);
+        res.render('list', {pictures:pictures});
+      }
+    });
+    // console.log(longitude, latitude);
+  }
+  else {
+    res.redirect('/home');
+  }
+});
+
 app.post('/upload', upload.single('picture'), function(req, res) { // single인자로 file name에 지정된 값을 설정
-  console.log(req.file);
+  // console.log(req.file);
+
+  var username = req.session.username;
+  var sql = 'select * from picture where username = ?'
+  var params = [username];
+  conn.query(sql, params, function (error, pictures, fields) {
+    if (error) {
+    //  console.log(error);
+    }
+    else {
+    //  console.log(pictures);
+      var longlats = [];
+      for (var i = 0; i < pictures.length; ++i)
+      {
+        longlats.push({longitude:pictures[i].longitude, latitude:pictures[i].latitude});
+      }
+    //  console.log(longlats);
+      res.render('work', {latitude:latitude, longitude:longitude, pictureLocation: longlats});
+    }
+  });
+
+  // console.log(longitude, latitude);
   // var sql = 'insert into user (username, password, nickname, salt) values(?, ?, ?, ?)';
   res.redirect('/work');
 });

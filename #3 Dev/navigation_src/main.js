@@ -69,6 +69,7 @@ app.set('view engine', 'jade');
 app.set('views', './views');
 // routing setting
 app.use(express.static(path.join(__dirname, 'views')));
+app.use(express.static(path.join(__dirname, 'upload')));
 app.use(bodyParser.urlencoded({extended: false}));
 
 app.use(session( {
@@ -238,6 +239,7 @@ app.get('/map', function(req, res) {
         // console.log(pictures);
         var longlats = [];
         // console.log(pictures.length);
+        console.log('in mapp = ' + pictures.length);
         for (var i = 0; i < pictures.length; ++i)
         {
           longlats.push({longitude:pictures[i].longitude, latitude:pictures[i].latitude});
@@ -270,19 +272,20 @@ app.get('/list', function(req, res) {
       }
       else {
         // console.log(pictures);
-        var pictures = [];
-        console.log(pictures.length);
+        var my_pictures = [];
+        // console.log(pictures.length);
+        console.log('in list = ' + pictures.length);
         for (var i = 0; i < pictures.length; ++i)
         {
-          console.log(req.session.username);
-          var filename = req.session.username + "/" + pictures[i].filename;
+          // console.log(req.session.username);
+          var filename = './' + req.session.username + "/" + pictures[i].filename;
           console.log(filename);
-          pictures.push( { filename: filename, longitude: pictures[i].longitude, latitude: pictures[i].latitude} );
+          my_pictures.push( { filename: filename, longitude: pictures[i].longitude, latitude: pictures[i].latitude} );
           // longlats.push({longitude:pictures[i].longitude, latitude:pictures[i].latitude});
         }
         // console.log(longlats);
         console.log(pictures);
-        res.render('list', {pictures:pictures});
+        res.render('list', {pictures:my_pictures});
       }
     });
     // console.log(longitude, latitude);

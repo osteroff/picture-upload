@@ -4,7 +4,7 @@ html
     title Picup
     meta(charset='UTF-8')
     meta(name='viewport', content='width=device-width, initial-scale=1.0')
-    link(rel='stylesheet', href='../assets/css/guide-style.css')
+    link(rel='stylesheet', href='../assets/css/home-style.css')
     link(rel='stylesheet', href='../assets/css/guide-timer.css')
   body
     h1.header
@@ -16,15 +16,15 @@ html
       a(href='contact') CONTACT
     .bg
       h1 Picup
-      form(action='/auth/login', method='post')
-      p
-      input(type='text', name='id', placeholder='id')
-      p
-      input(type='password', name='password', placeholder='password')
-      p
-      input(type='submit', name='login', value='Login')
-      br
-      a(href="/register" target="_blank") Sign in
+      form(action='/home' method='post')
+        p
+        input(type='text' name='username' placeholder='username')
+        p
+        input(type='password' name='password' placeholder='password')
+        p
+        input(type='submit' name='login' value='Sign up')
+        p
+        a(href="/register") Sign in
 
     footer
       #clock.light

@@ -8,6 +8,8 @@ html
     script(src="https://code.jquery.com/jquery-1.10.2.js")
     script(src="../assets/js/map.js")
     link(rel='stylesheet', href='../assets/css/map-style.css')
+  p
+    button(type='button', onclick="location.href='/upload'") Picup!
   body(onload="makeMap(#{longitude}, #{latitude})")
     h1.header
       a(href='home') Picup
